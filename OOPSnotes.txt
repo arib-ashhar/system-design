@@ -1,0 +1,662 @@
+ - By default all members of a class are private.
+
+
+ - Class, members and Objects
+
+access specifiers: used to control the accessibility of member variables.
+private: means only the member functions and friendly function can access these variables.
+public: means any object of this class can be accessed by outside objects.
+protected: means it can be accessed by sub class members also whcich is not in the case of private.
+
+class object can also be initialized like struct
+
+class base {
+    public:
+    int a;
+};
+
+int main(){
+    //code here
+    base obj={10};
+    cout<<obj.a<<endl;
+}
+
+OUtPUT:
+0
+
+Link: https://www.geeksforgeeks.org/c-classes-and-objects/
+Link: https://www.geeksforgeeks.org/access-modifiers-in-c/
+
+
+ - Constructors
+
+By default empty body constructor is constructed, and copy constructor as well and assignment operator also.
+Link: https://www.geeksforgeeks.org/constructors-c/
+ - Destructors
+Link: https://www.geeksforgeeks.org/destructors-c/
+
+ - Abstract Class
+A class is abstract if it has at least one pure virtual function. 
+Link: https://www.geeksforgeeks.org/pure-virtual-functions-and-abstract-classes/
+
+
+ - template class, function
+
+
+ 
+ - this pointer
+Link: https://www.geeksforgeeks.org/this-pointer-in-c/
+
+ - FRIEND FUNCITON
+Friend functions/classes are used to access private or protected member of other classes in which it is declared as a friend.
+It can be a global function or function of another class.
+The keyword “friend” is placed only in the function declaration of the friend function and not in the function definition or call.
+
+Link: https://www.geeksforgeeks.org/friend-class-function-cpp/
+syntax:
+
+class base {
+    private:
+        int private_variable;
+    protected:
+        int protected_variable;
+    
+    //rest of the class definition
+
+    friend int friendly_funcition(base&);
+    friend class friendly_class;
+
+    //or we can declare one member function of another class as friendly function using scope resolution operator
+    friend int friendly_class::member_function(base&);
+};
+
+int friendly_funcition(base& object) {
+    int x = object.private_variable;
+    int y=object.protected_variable;
+}
+
+class friendly_class{
+    public:
+        int member_function(base& object) {
+            int x=object.private_variable;
+        }
+};
+
+
+ - Encapsulation
+Encapsulation is defined as binding together the data and the functions that manipulate them.
+Encapsulation is defined as wrapping up data and information under a single unit.
+Link: https://www.geeksforgeeks.org/encapsulation-in-cpp/
+
+ - Abstraction
+Abstraction means displaying only essential information and hiding the background details or implementation.
+It is done using classes and header files
+Link: https://www.geeksforgeeks.org/abstraction-in-cpp/
+
+ - Polymorphism
+It basically means same function/operators can have multiple implementations/forms.
+Link: https://www.geeksforgeeks.org/cpp-polymorphism/
+
+
+            Polymorphism
+            /            \
+    compile time        Run time
+    /           \               \
+Function        operator        Virtual functions
+Overloading     Overloading
+
+
+ - FUNCTION OVERLOAD (achieved at compile time)
+When there are multiple functions with the same name but different parameters, then the functions are said to be overloaded, hence this is known as Function Overloading.
+Functions can be overloaded by changing the number of arguments or/and changing the type of arguments.
+different return type doesn't overload functions, it throws error for redifinition of same function.
+
+#include <iostream>
+using namespace std;
+ 
+ 
+void add(int a, int b)
+{
+  cout << "sum = " << (a + b);
+}
+ 
+void add(double a, double b)
+{
+    cout << endl << "sum = " << (a + b);
+}
+ 
+// Driver code
+int main()
+{
+    add(10, 2);
+    add(5.3, 6.2);
+ 
+    return 0;
+}
+
+Link: https://www.geeksforgeeks.org/function-overloading-c/
+
+
+ - OPERATOR OVERLOAD (also done at compile time)
+In C++, we can make operators work for user-defined classes.
+This means C++ has the ability to provide the operators with a special meaning for a data type, this ability is known as operator overloading.
+Operator functions are the same as normal functions.
+The only differences are, that the name of an operator function is always the operator keyword followed by the symbol of the operator,
+and operator functions are called when the corresponding operator is used.
+
+
+#include <iostream>
+using namespace std;
+  
+class Complex {
+private:
+    int real, imag;
+  
+public:
+    Complex(int r = 0, int i = 0)
+    {
+        real = r;
+        imag = i;
+    }
+  
+    // This is automatically called when '+' is used with
+    // between two Complex objects
+    Complex operator+(Complex const& obj)
+    {
+        Complex res;
+        res.real = real + obj.real;
+        res.imag = imag + obj.imag;
+        return res;
+    }
+    void print() { cout << real << " + i" << imag << '\n'; }
+};
+  
+int main()
+{
+    Complex c1(10, 5), c2(2, 4);
+    Complex c3 = c1 + c2;
+    c3.print();
+}
+
+Link: https://www.geeksforgeeks.org/operator-overloading-cpp/
+
+
+
+ - Function overiding (run time polymorphism)
+In this when there is change needed to be done in the functionality of same function in a derived class we use function overriding.
+Function signature shouldbe same ,i.e the return type and parameters should be same.
+
+Basic syntax;
+
+class Parent{
+
+  access_modifier:
+
+    // overridden function
+
+    return_type name_of_the_function(){}
+
+};
+
+
+  class child : public Parent {
+
+    access_modifier:
+
+      // overriding function
+
+      return_type name_of_the_function(){}
+
+};
+
+
+Very Important:
+
+Link: https://www.geeksforgeeks.org/function-overriding-in-cpp/
+
+#include <iostream>
+using namespace std;
+ 
+class Parent {
+public:
+    void GeeksforGeeks()
+    {
+        cout << "Base Function" << endl;
+    }
+};
+ 
+class Child : public Parent {
+public:
+    void GeeksforGeeks()
+    {
+        cout << "Derived Function" << endl;
+    }
+};
+ 
+int main()
+{
+     Child Child_Derived;
+     Child_Derived.GeeksforGeeks();
+    
+    // access GeeksforGeeks() function of the Base class
+     Child_Derived.Parent::GeeksforGeeks();
+
+     // pointer of Parent type that points to derived1
+    Parent* ptr = &Child_Derived;
+ 
+    // call function of Base class using ptr
+    ptr->GeeksforGeeks();
+    return 0;
+}
+
+OUTPUT:
+Derived Function
+Base Function
+Base Function
+
+
+So in function overirding the function called at run time depends on the type of the object is linked. here static linkage happens which means that overiding functio is set only once by compiler which is in the base class.
+
+ - Virtual Function (used in run time polymorphism)
+Always use virtual function instead of simple function overiding because its much cleaner.
+A virtual function is a member function that is declared in the base class using the keyword virtual and is re-defined (Overridden) in the derived class.
+It tells the compiler to perform late binding where the compiler matches the object with the right called function and executes it during the runtime. 
+This technique falls under Runtime Polymorphism.
+
+Link: https://www.geeksforgeeks.org/virtual-functions-and-runtime-polymorphism-in-cpp/
+
+  >>  Now, we’ll look at an example without using the concepts of virtual function to clarify your understanding.
+
+#include <iostream>
+using namespace std;
+ 
+// Base class
+class Shape {
+public:
+    // parameterized constructor
+    Shape(int l, int w)
+    {
+        length = l;
+        width = w;
+    }
+    int get_Area()
+    {
+        cout << "This is call to parent class area\n";
+        // Returning 1 in user-defined function means true
+        return 1;
+    }
+ 
+protected:
+    int length, width;
+};
+ 
+// Derived class
+class Square : public Shape {
+public:
+    Square(int l = 0, int w = 0)
+        : Shape(l, w)
+    {
+    } // declaring and initializing derived class
+    // constructor
+    int get_Area()
+    {
+        cout << "Square area: " << length * width << '\n';
+        return (length * width);
+    }
+};
+// Derived class
+class Rectangle : public Shape {
+public:
+    Rectangle(int l = 0, int w = 0)
+        : Shape(l, w)
+    {
+    } // declaring and initializing derived class
+    // constructor
+    int get_Area()
+    {
+        cout << "Rectangle area: " << length * width
+             << '\n';
+        return (length * width);
+    }
+};
+ 
+int main()
+{
+    Shape* s;
+ 
+    // Making object of child class Square
+    Square sq(5, 5);
+ 
+    // Making object of child class Rectangle
+    Rectangle rec(4, 5);
+    s = &sq; // reference variable
+    s->get_Area();
+    s = &rec; // reference variable
+    s->get_Area();
+ 
+    return 0; // too tell the program executed
+    // successfully
+}
+
+OUTPUT:
+This is call to parent class area
+This is call to parent class area
+
+Note:
+    We store the address of each child’s class Rectangle and Square object in s and
+    Then we call the get_Area() function on it,
+    Ideally, it should have called the respective get_Area() functions of the child classes but
+    Instead, it calls the get_Area() defined in the base class.
+    This happens due to static linkage which means the call to get_Area() is getting set only once by the compiler which is in the base class.
+
+ >> Same example using virtual functions:
+
+#include <fstream>
+#include <iostream>
+using namespace std;
+ 
+// Declaration of Base class
+class Shape {
+public:
+    // Usage of virtual constructor
+    virtual void calculate()
+    {
+        cout << "Area of your Shape ";
+    }
+    // usage of virtual Destuctor to avoid memory leak
+    virtual ~Shape()
+    {
+        cout << "Shape Destuctor Call\n";
+    }
+};
+ 
+// Declaration of Derived class
+class Rectangle : public Shape {
+public:
+    int width, height, area;
+ 
+    void calculate()
+    {
+        cout << "Enter Width of Rectangle: ";
+        cin >> width;
+ 
+        cout << "Enter Height of Rectangle: ";
+        cin >> height;
+ 
+        area = height * width;
+        cout << "Area of Rectangle: " << area << "\n";
+    }
+ 
+    // Virtual Destuctor for every Derived class
+    virtual ~Rectangle()
+    {
+        cout << "Rectangle Destuctor Call\n";
+    }
+};
+ 
+// Declaration of 2nd derived class
+class Square : public Shape {
+public:
+    int side, area;
+ 
+    void calculate()
+    {
+        cout << "Enter one side your of Square: ";
+        cin >> side;
+ 
+        area = side * side;
+        cout << "Area of Square: " << area << "\n";
+    }
+   
+   // Virtual Destuctor for every Derived class
+    virtual ~Square()
+    {
+        cout << "Square Destuctor Call\n";
+    }
+};
+ 
+int main()
+{
+ 
+    // base class pointer
+    Shape* S;
+    Rectangle r;
+ 
+    // initialization of reference variable
+    S = &r;
+ 
+    // calling of Rectangle function
+    S->calculate();
+    Square sq;
+ 
+    // initialization of reference variable
+    S = &sq;
+ 
+    // calling of Square function
+    S->calculate();
+ 
+    // return 0 to tell the program executed
+    // successfully
+    return 0;
+}
+
+OUTpUT:
+Enter Width of Rectangle: 10
+Enter Height of Rectangle: 20
+Area of Rectangle: 200
+Enter one side your of Square: 16
+Area of Square: 256
+
+Note:
+So in virtual function the actual function that si called depends on the type of the object calling it not the type of pointer.
+
+example we construct a class Employee with member functions raiseSalary(), promote(), demote()
+Now we want to call these functions based on the type of the objects(Employees)
+
+class Employee{
+    public:
+    virtual void raiseSalary() {
+        //code here
+    }
+
+    virtual void promote() {
+        //code here
+    }
+
+    virtual void demote() {
+        //code here
+    }
+};
+
+class Manager: public Employee {
+    public:
+    void raiseSalary() {
+        //mamager specific raise code
+    }
+
+    void promote() {
+        //manager specific
+    }
+
+    void demote() {
+
+    }
+};
+
+class Engineer: public Employee {
+    public:
+    void raiseSalary() {
+        //engineer specific code here
+    }
+
+    void promote() {}
+    void demote() {}
+};
+
+void globalRaiseSalary(Employee* emp[], int n)
+{
+    for (int i = 0; i < n; i++) {
+        // Polymorphic Call: Calls raiseSalary()
+        // according to the actual object, not
+        // according to the type of pointer
+        emp[i]->raiseSalary();
+    }
+}
+
+
+
+Function overiding vs Function Overloading
+
+ > Function Overloading provides multiple definitions of the function by changing signature.	Function Overriding is the redefinition of base class function in its derived class with same signature.
+ > Overiding can only be done only single sub class function. where as function over loading can be done multiple times.
+ > Overloaded functions are in same scope.	Overridden functions are in different scopes.
+ > Overloading is used when the same function has to behave differently depending upon parameters passed to them.	Overriding is needed when derived class function has to do some different job than the base class function.
+ > In function overloading, we don’t need inheritance.	In function overriding, we need an inheritance concept.
+ Link: https://www.geeksforgeeks.org/function-overloading-vs-function-overriding-in-cpp/
+
+
+
+ - Inheritance
+It is used to provide code reusability.
+
+Base Class also known as super class.
+Child class also known as sub class.
+The capability of a class to derive properties and characteristics from another class is called Inheritance.
+Inheritance is one of the most important features of Object-Oriented Programming. 
+When we say derived class inherits the base class, it means, the derived class inherits all the properties of the base class, without changing the properties of base class and may add new features to its own.
+These new features in the derived class will not affect the base class. 
+The derived class is the specialized class for the base class.
+
+Link: https://www.geeksforgeeks.org/inheritance-in-c/
+
+Syntax:
+
+class  <derived_class_name> : <access-specifier> <base_class_name>
+{
+        //body
+}
+
+ > Private Inheritance
+When a base class is privately inherited by the derived class, public and protected members of the base class becomes the private members of the derived class and therefore,
+the public and protected members of the base class can only be accessed by the member functions of the derived class. 
+They are inaccessible to the objects of the derived class.
+
+ > Protected Inheritance
+When a base class is protected inherited by the derived class, public and protected members of the base class becomes the protected members of the derived class and therefore,
+the public members of the base class can only be accessed by the member functions of the derived class and its own derived class (). 
+They are inaccessible to the objects of the derived class.
+
+ > Public inheritance
+On the other hand, when the base class is publicly inherited by the derived class, public members of the base class also become the public members of the derived class.
+and protected members of the base class will become protected in the derived class.
+Therefore, the public members of the base class are accessible by the objects of the derived class as well as by the member functions of the derived class.
+
+Private Members of base are inaccessible by any type of derieved classes.
+
+
+Types Of Inheritance:-
+
+    Single inheritance
+    Multilevel inheritance
+    Multiple inheritance
+    Hierarchical inheritance
+    Hybrid inheritance
+
+ > Single Inheritance
+Syntax:
+class A
+{ 
+... .. ... 
+};
+
+class B: public A
+{
+... .. ...
+};
+
+ > Multiple inheritance: Multiple Inheritance is a feature of C++ where a class can inherit from more than one class. i.e one subclass is inherited from more than one base class.
+
+Syntax:
+class B
+{ 
+... .. ... 
+};
+class C
+{
+... .. ...
+};
+class A: public B, public C //this is multiple level inherited sub class
+{
+... ... ...
+};
+
+ > Multilevel inheritance: In this type of inheritance, a derived class is created from another derived class.
+
+Syntax:
+class C
+{ 
+... .. ... 
+};
+class B:public C
+{
+... .. ...
+};
+class A: public B
+{
+... ... ...
+};
+
+ > Hierarchical Inheritance: In this type of inheritance, more than one subclass is inherited from a single base class. i.e. more than one derived class is created from a single base class.
+
+Syntax:
+class A  
+{  
+    // body of the class A.  
+}    
+class B : public A   
+{  
+    // body of class B.  
+}  
+class C : public A  
+{  
+    // body of class C.  
+}   
+class D : public A  
+{  
+    // body of class D.  
+}   
+
+ > Hybrid (Virtual) Inheritance: Hybrid Inheritance is implemented by combining more than one type of inheritance.
+For example: Combining Hierarchical inheritance and Multiple Inheritance.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ - new and delete operator
+It is used to dynamically allocate memory.
+
+pointer_variable = new type;
+
+int* ptr = new int;
+int* arr_ptr = new int[10];
+class_name* ptr = new class_name;
+
+delete ptr;
+delete[] arr_ptr;   //deletes all the memory allocated to arr_ptr
+Link: https://www.geeksforgeeks.org/new-and-delete-operators-in-cpp-for-dynamic-memory/
+
