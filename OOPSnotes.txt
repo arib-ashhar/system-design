@@ -21,6 +21,38 @@ int main(){
     cout<<obj.a<<endl;
 }
 
+class Outer
+{
+  public:
+    // Nested class inside Outer
+    class Inner
+    {
+      public:
+        void display()
+        {
+            cout << "This is the Inner class" << endl;
+        }
+    };
+
+    void show()
+    {
+        cout << "This is the Outer class" << endl;
+    }
+};
+
+int main()
+{
+    // Creating object of Outer class
+    Outer outerObj;
+    outerObj.show();
+
+    // Creating object of Inner class using Outer
+    Outer::Inner innerObj;
+    innerObj.display();
+
+    return 0;
+}
+
 OUtPUT:
 0
 
@@ -31,16 +63,106 @@ Link: https://www.geeksforgeeks.org/access-modifiers-in-c/
  - Constructors
 
 By default empty body constructor is constructed, and copy constructor as well and assignment operator also.
+Types of constructors
+ - Default Constructor
+ - parameterized Constructor
+ - Copy Constructor
+ - Move Constructor
+
+
+class A {
+public:
+    int val;
+  
+    // Constructor without any parameters
+    A() {
+        cout << "Constructor called" << endl;
+    }
+
+    // Parameterized Constructor
+    A(int x) {
+        val = x;
+    }
+
+    // Copy constructor
+    A(A& a) {
+        val = a.val;
+    }
+
+    // Move Constructor
+    A(int &&a) : val(move(a)) {
+        cout << "Move constructor called!" << endl;
+    }
+};
+
+int main() {
+    A a1(20);
+    
+    // Creating another object from a1
+    A a2(a1);   // Copy Constructor
+    
+    int a = 4;
+    A a3(move(a));  // Move Constructor
+    return 0;
+}
+
+
 Link: https://www.geeksforgeeks.org/constructors-c/
  - Destructors
+    When do we need to write a user-defined destructor?
+        If we don’t write a destructor, the compiler provides a default one.
+        The default destructor works fine for classes without dynamic memory or pointers.
+        If a class has pointers or dynamically allocated memory, we must write a destructor.
+        A user-defined destructor releases memory or other resources before the object is destroyed.
+        Writing a destructor in such cases prevents memory leaks.
+    
 Link: https://www.geeksforgeeks.org/destructors-c/
+
+
+
 
  - Abstract Class
 A class is abstract if it has at least one pure virtual function. 
+A pure virtual function is a virtual function with no implementation in the base class, declared using = 0. 
+A class with at least one pure virtual function is an abstract class that cannot be instantiated and serves as a blueprint for derived classes, which must provide their own implementation.
+
+class Shape {
+public:
+    virtual void draw() = 0; // Pure virtual function
+};
+
+class Circle : public Shape {
+public:
+    void draw() override {
+        cout << "Drawing Circle\n";
+    }
+};
+
 Link: https://www.geeksforgeeks.org/pure-virtual-functions-and-abstract-classes/
 
 
  - template class, function
+Examples:
+
+template <typename T> T myMax(T x, T y){
+    return (x > y) ? x : y;
+}
+
+template <typename T> class Geek{
+  public:
+    T x;
+    T y;
+
+    // Constructor
+    Geek(T val1, T val2) : x(val1), y(val2){
+    }
+
+    // Method to get values
+    void getValues(){
+        cout << x << " " << y;
+    }
+};
+Link: https://www.geeksforgeeks.org/cpp/templates-cpp/
 
 
  
@@ -51,6 +173,7 @@ Link: https://www.geeksforgeeks.org/this-pointer-in-c/
 Friend functions/classes are used to access private or protected member of other classes in which it is declared as a friend.
 It can be a global function or function of another class.
 The keyword “friend” is placed only in the function declaration of the friend function and not in the function definition or call.
+Remember one thing, friendship is not mutual. If class A is a friend of B, then B doesn't become a friend of A automatically.
 
 Link: https://www.geeksforgeeks.org/friend-class-function-cpp/
 syntax:
@@ -92,6 +215,84 @@ Link: https://www.geeksforgeeks.org/encapsulation-in-cpp/
 Abstraction means displaying only essential information and hiding the background details or implementation.
 It is done using classes and header files
 Link: https://www.geeksforgeeks.org/abstraction-in-cpp/
+Abstraction is mainly achieved using abstract classes and pure virtual functions.
+
+// Abstract base class as there is a
+// pure virtual method
+class Shape {
+protected:
+    string color;
+
+public:
+    Shape(string color) {
+        this->color = color;
+    }
+
+    // Abstract or Pure virtual method
+    virtual double area() = 0;
+
+    // Concrete method
+    string getColor() {
+        return color;
+    }
+
+    virtual ~Shape() {}
+};
+
+// Derived class: Rectangle
+class Rectangle : public Shape {
+    double length;
+    double width;
+
+public:
+    Rectangle(string color, double length, double width)
+        : Shape(color) {
+        this->length = length;
+        this->width = width;
+    }
+
+    double area() override {
+        return length * width;
+    }
+};
+
+
+NOTE: In C++, a class can act as an interface if it contains only pure virtual functions and no data members or implemented methods. 
+This enforces that all derived classes must implement every function, achieving full control abstraction.
+
+// Pure Abstract Class acting as an Interface
+class Printable {
+public:
+    virtual void print() = 0;  // pure virtual function
+    virtual void scan() = 0;   // pure virtual function
+
+    // Virtual destructor is a good practice for base classes
+    virtual ~Printable() {}
+};
+
+// Derived class must implement all functions
+class Document : public Printable {
+public:
+    void print() override {
+        cout << "Printing document..." << endl;
+    }
+    void scan() override {
+        cout << "Scanning document..." << endl;
+    }
+};
+
+// Another derived class implementing the same interface
+class Photo : public Printable {
+public:
+    void print() override {
+        cout << "Printing photo..." << endl;
+    }
+    void scan() override {
+        cout << "Scanning photo..." << endl;
+    }
+};
+
+
 
  - Polymorphism
 It basically means same function/operators can have multiple implementations/forms.
