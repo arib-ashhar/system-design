@@ -310,7 +310,7 @@ Overloading     Overloading
  - FUNCTION OVERLOAD (achieved at compile time)
 When there are multiple functions with the same name but different parameters, then the functions are said to be overloaded, hence this is known as Function Overloading.
 Functions can be overloaded by changing the number of arguments or/and changing the type of arguments.
-different return type doesn't overload functions, it throws error for redifinition of same function.
+NOTE: different return type doesn't overload functions, it throws error for redifinition of same function.
 
 #include <iostream>
 using namespace std;
@@ -412,6 +412,13 @@ class Parent{
 
 
 Very Important:
+How Does It Work?
+    1. If you call the function using a base class object, the base class version is executed.
+    2. If you call it using a derived class object, the derived class version is executed.
+
+Limitations of Function Overriding
+    1. Slightly slower than normal function calls due to virtual table lookup.
+    2. Adds memory overhead (vtable, vptr).
 
 Link: https://www.geeksforgeeks.org/function-overriding-in-cpp/
 
@@ -456,7 +463,41 @@ Base Function
 Base Function
 
 
-So in function overirding the function called at run time depends on the type of the object is linked. here static linkage happens which means that overiding functio is set only once by compiler which is in the base class.
+So in function overirding the function called at run time depends on the type of the object is linked. 
+here static linkage happens which means that overiding functio is set only once by compiler which is in the base class.
+
+What is final in C++?
+The final keyword is used to prevent further overriding or inheritance of:
+    1. Virtual functions — to stop them from being overridden in derived classes.
+    2. Classes — to stop them from being inherited.
+
+Usage:
+method with final
+class Base {
+public:
+    virtual void show() final {  // Cannot be overridden
+        cout << "Base show\n";
+    }
+};
+
+class Derived : public Base {
+public:
+    void show() override {       // Error: cannot override final function
+        cout << "Derived show\n";
+    }
+};
+
+
+Class with final
+class FinalClass final {
+public:
+    void display() {
+        cout << "This is a final class\n";
+    }
+};
+
+class SubClass : public FinalClass {  // Error: cannot inherit from final class
+};
 
  - Virtual Function (used in run time polymorphism)
 Always use virtual function instead of simple function overiding because its much cleaner.
@@ -651,6 +692,10 @@ Area of Square: 256
 Note:
 So in virtual function the actual function that si called depends on the type of the object calling it not the type of pointer.
 
+Why Virtual Destructors Are Important
+    1. When deleting objects through a base class pointer, destructors must be virtual.
+    2. This prevents memory leaks and ensures derived destructors are executed.
+
 example we construct a class Employee with member functions raiseSalary(), promote(), demote()
 Now we want to call these functions based on the type of the objects(Employees)
 
@@ -728,7 +773,7 @@ When we say derived class inherits the base class, it means, the derived class i
 These new features in the derived class will not affect the base class. 
 The derived class is the specialized class for the base class.
 
-Link: https://www.geeksforgeeks.org/inheritance-in-c/
+Link:   
 
 Syntax:
 
