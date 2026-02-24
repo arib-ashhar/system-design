@@ -1,6 +1,8 @@
 /*
-Link: https://sourcemaking.com/design_patterns/factory_method
+Link: https://refactoring.guru/design-patterns/factory-method
 Link: https://www.youtube.com/watch?v=tv54FY48Vio&list=PLliXPok7ZonlZJuAN0hvUnf5ovFepjxU0&index=2&pp=iAQB
+
+Same Logistics problem.
 
 */
 
@@ -9,45 +11,83 @@ Link: https://www.youtube.com/watch?v=tv54FY48Vio&list=PLliXPok7ZonlZJuAN0hvUnf5
 
 using namespace std;
 
-class vehicle {
+// This is the product interface
+class Transport {
     public:
-    virtual void getVehicle() = 0;
+        virtual ~Transport() {}
+        virtual bool doShipping() = 0;
 };
 
-class car: public vehicle {
+class Truck : public Transport {
     public:
-    void getVehicle() {
-        cout<<"New Car manufactured\n";
+    Truck() {
+        cout<<"Transport Object of type Truck created"<<endl;
+    }
+
+    bool doShipping() override {
+        cout<<"Shipping done via land"<<endl;
+        return true;
     }
 };
 
-class truck: public vehicle {
+class Ship : public Transport {
     public:
-    void getVehicle() {
-        cout<<"New Truck Manufactured\n";
+    Ship() {
+        cout<<"Transport Object of type Ship created"<<endl;
+    }
+
+    bool doShipping() override {
+        cout<<"Shipping done via water"<<endl;
+        return true;
     }
 };
 
-class vehicleFactory {
+// creator class
+class Logistics {
     public:
-    static vehicle* createVehicle(string vehicleType);
+        virtual ~Logistics() {};
+        virtual Transport* createTransport() = 0;
+
+        bool planDelivery() {
+            Transport* transport = this->createTransport();
+            transport->doShipping();
+            delete transport;
+            return true;
+        }
 };
 
-vehicle* vehicleFactory::createVehicle(string vehicleType) {
-    if(vehicleType == "Car")
-        return new car;
-    else if(vehicleType == "Truck")
-        return new truck;
-    else
-        return new car;
+class LandLogistics: public Logistics {
+    public:
+        Transport* createTransport() override {
+            cout<<"Land Logistics is triggered"<<endl;
+            return new Truck();
+        }
+};
+
+class SeaLogistics : public Logistics {
+    public:
+        Transport* createTransport() override {
+            cout<<"Sea Logistics is triggered"<<endl;
+            return new Ship();
+        }
+};
+
+//client code
+void manageLogistics(string input) {
+    if(input == "L") {
+        Logistics* logistics = new LandLogistics();
+        logistics->planDelivery();
+    }
+    else if(input == "S") {
+        Logistics* logistics = new SeaLogistics();
+        logistics->planDelivery();
+    }
 }
-
 
 int main() {
     string input;
-    cout<<"Enter vehicle type: ";
+    cout<<"Enter Logistics Type (L/S): ";
     cin>>input;
-    vehicle* vhicle_object = vehicleFactory::createVehicle(input);
-    vhicle_object->getVehicle();
+    manageLogistics(input);
     return 0;
 }
