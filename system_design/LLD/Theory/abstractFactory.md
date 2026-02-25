@@ -9,7 +9,7 @@ Imagine that you’re creating a furniture shop simulator. Your code consists of
 1. A family of related products, say: ```Chair``` + ```Sofa``` + ```CoffeeTable```.
 2. Several variants of this family. For example, products ```Chair``` + ```Sofa``` + ```CoffeeTable``` are available in these variants: ```Modern```, ```Victorian```, ```ArtDeco```.
 
-![](./images/abstractFactory-1.png)
+![](../images/abstractFactory-1.png)
 
 You need a way to create individual furniture objects so that they match other objects of the same family. Customers get quite mad when they receive non-matching furniture.
 
@@ -19,11 +19,11 @@ Also, you don’t want to change existing code when adding new products or famil
 
 The first thing the Abstract Factory pattern suggests is to explicitly declare interfaces for each distinct product of the product family (e.g., chair, sofa or coffee table). Then you can make all variants of products follow those interfaces. For example, all chair variants can implement the Chair interface; all coffee table variants can implement the CoffeeTable interface, and so on.
 
-![](./images/abstractFactory-2.png)
+![](../images/abstractFactory-2.png)
 
 The next move is to declare the Abstract Factory—an interface with a list of creation methods for all products that are part of the product family (for example, ```createChair```, ```createSofa``` and ```createCoffeeTable```). These methods must return abstract product types represented by the interfaces we extracted previously: ```Chair```, ```Sofa```, ```CoffeeTable``` and so on.
 
-![](./images/abstractFactory-3.png)
+![](../images/abstractFactory-3.png)
 
 Now, how about the product variants? For each variant of a product family, we create a separate factory class based on the  ```AbstractFactory``` interface. A factory is a class that returns products of a particular kind. For example, the ```ModernFurnitureFactory``` can only create ```ModernChair```, ```ModernSofa``` and ```ModernCoffeeTable``` objects.
 
@@ -31,7 +31,7 @@ The client code has to work with both factories and products via their respectiv
 
 ## Structure
 
-![](./images/abstractFactory-4.png)
+![](../images/abstractFactory-4.png)
 
 This is main structure of abstract factory design pattern.
 
